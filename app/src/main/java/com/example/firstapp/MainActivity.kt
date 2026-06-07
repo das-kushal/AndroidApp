@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
                         ColorBox(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .padding(innerPadding)
                                 .weight(1f),
 
                             ) {
