@@ -50,176 +50,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val snackBarHostState = remember { SnackbarHostState() }
             FirstAppTheme {
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize(),
-                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
 
-                ) { innerPadding ->
-                    var color by remember { mutableStateOf(Color.Yellow) }
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        ColorBox(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .weight(1f),
 
-                            ) {
-                            color = it
-                        }
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .weight(1f)
-                                .background(color)
-                        )
-                    }
+                    ) { innerPadding ->
+
                 }
             }
         }
     }
 }
 
-
-@Composable
-fun ColorBox(
-    modifier: Modifier = Modifier,
-    updateColor: (Color) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .background(Color.Red)
-            .clickable {
-                updateColor(
-                    Color(
-                        Random.nextFloat(),
-                        Random.nextFloat(),
-                        Random.nextFloat(),
-                        1f
-                    )
-                )
-            }
-    )
-}
-
-@Composable
-fun ImageCard(
-    painter: Painter,
-    contentDescription: String,
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(5.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth() // Ensure content fills card width
-        ) {
-            Image(
-                painter = painter,
-                contentDescription = contentDescription,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize() // Ensure image fills the box
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.White
-                            ),
-                            startY = 300f
-                        )
-                    )
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
-                contentAlignment = Alignment.BottomStart
-            ) {
-                Text(title, style = TextStyle(color = Color.Black, fontSize = 16.sp))
-            }
-        }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .height(400.dp)
-            .padding(10.dp)
-            .fillMaxSize(),
-    ) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier,
-            style = MaterialTheme.typography.headlineLarge
-        )
-
-        Text(
-            text = "Hello world",
-            fontSize = 25.sp
-        )
-
-        val onClick = {
-            println("clicked")
-        }
-        ElevatedButton(
-            onClick = onClick,
-            modifier = Modifier.padding(10.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-        }
-    }
-}
-
-//@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ImageCardPreview() {
-    FirstAppTheme {
-        Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp)
-                .background(Color.Red),
-        ) { innerPadding ->
-
-            val painter = painterResource(R.drawable.leetcodebadge)
-            val description = "leetcode badge"
-            val title = "leetcode badge"
-
-            // Use a root container to handle Scaffold's innerPadding
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(0.5f)
-                    .statusBarsPadding()
-                    .padding(innerPadding)
-
-
-            ) {
-                ImageCard(
-                    painter = painter,
-                    contentDescription = description,
-                    title = title,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
-    }
-}
