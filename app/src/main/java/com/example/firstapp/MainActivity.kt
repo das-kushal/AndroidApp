@@ -42,6 +42,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.example.firstapp.ui.theme.FirstAppTheme
 import kotlin.random.Random
 
@@ -64,3 +69,69 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun BottomNavigationBar(
+    items: List<BottomNavItem>,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    onItemClick: (BottomNavItem) -> Unit
+) {
+
+}
+
+
+@Composable
+fun Navigation(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") {
+            HomeScreen()
+        }
+
+        composable("chat") {
+            ChatScreen()
+        }
+
+        composable("settings") {
+            SettingsScreen()
+        }
+    }
+}
+
+
+@Composable
+fun HomeScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Text("Home Screen")
+    }
+}
+
+
+@Composable
+fun ChatScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Text("Chat Screen")
+    }
+}
+
+
+@Composable
+fun SettingsScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Text("Settings Screen")
+    }
+}
