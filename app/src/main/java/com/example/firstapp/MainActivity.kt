@@ -1,54 +1,35 @@
 package com.example.firstapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import com.example.firstapp.ui.theme.FirstAppTheme
-import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,76 +43,74 @@ class MainActivity : ComponentActivity() {
 
 
                     ) { innerPadding ->
-
+                    TopBar(modifier = Modifier.padding(innerPadding))
+                    Hello(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
     }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigationBar(
-    items: List<BottomNavItem>,
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    onItemClick: (BottomNavItem) -> Unit
-) {
+fun TopBar(modifier: Modifier = Modifier) {
+    val context = LocalContext.current.applicationContext
+    TopAppBar(
+        title = { Text("Hello world") },
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Checking", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Check, contentDescription = "Checking")
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Green,
+            titleContentColor = Color.White,
+            navigationIconContentColor = Color.White
 
-}
-
-
-@Composable
-fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen()
+        ),
+        actions = {
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Profile", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
+            }
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Search", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+            }
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "More", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
+            }
         }
-
-        composable("chat") {
-            ChatScreen()
-        }
-
-        composable("settings") {
-            SettingsScreen()
-        }
-    }
+    )
 }
 
-
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    Box(
+fun Hello(modifier: Modifier = Modifier) {
+    Column(
         modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-
+            .fillMaxHeight()
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text("Home Screen")
-    }
-}
-
-
-@Composable
-fun ChatScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-
-    ) {
-        Text("Chat Screen")
-    }
-}
-
-
-@Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-
-    ) {
-        Text("Settings Screen")
+        Text(
+            "Hello World!",
+            fontWeight = FontWeight.Bold
+        )
     }
 }
