@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -40,6 +42,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firstapp.ui.theme.FirstAppTheme
@@ -50,31 +54,42 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val snackBarHostState = remember { SnackbarHostState() }
             FirstAppTheme {
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize(),
-                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
 
-                ) { innerPadding ->
-                    var color by remember { mutableStateOf(Color.Yellow) }
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        ColorBox(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .weight(1f),
+                    ) { innerPadding ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(innerPadding)
+                    ) {
+                        itemsIndexed(
+                            listOf<String>(
+                                "acorn", "blizzard", "citadel", "dynasty", "eclipse",
+                                "falcon", "gargoyle", "harvest", "infinity", "javelin",
+                                "kingdom", "lantern", "mirage", "nomad", "octopus",
+                                "phantom", "quiver", "radiance", "sapphire", "tornado",
+                                "universe", "vanguard", "willow", "xenon", "yosemite",
+                                "zenith", "alchemy", "boulder", "cascade", "destiny",
+                                "entropy", "fable", "glitch", "horizon", "illusion",
+                                "journey", "kinetic", "legacy", "monolith", "nebula",
+                                "odyssey", "pinnacle", "quantum", "resonance", "solitude",
+                                "tundra", "utopia", "vortex", "wilderness", "zephyr"
+                            )
+                        ) { index, string ->
+                            Text(
+                                text = "$index - $string",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp)
 
-                            ) {
-                            color = it
+                            )
                         }
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .weight(1f)
-                                .background(color)
-                        )
                     }
                 }
             }
