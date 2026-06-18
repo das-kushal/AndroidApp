@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,6 +31,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -42,7 +45,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import com.example.firstapp.ui.theme.FirstAppTheme
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -51,6 +56,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val snackBarHostState = remember { SnackbarHostState() }
+            var textFieldState by remember { mutableStateOf("") }
+            val scope = rememberCoroutineScope()
             FirstAppTheme {
                 Scaffold(
                     modifier = Modifier
@@ -58,23 +65,31 @@ class MainActivity : ComponentActivity() {
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
 
                 ) { innerPadding ->
-                    var color by remember { mutableStateOf(Color.Yellow) }
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        ColorBox(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .weight(1f),
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 30.dp)
+                    ) {
+                        TextField(
+                            value = textFieldState,
+                            onValueChange = {
+                                textFieldState = it
+                            },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text("Enter your name") }
 
-                            ) {
-                            color = it
-                        }
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .weight(1f)
-                                .background(color)
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = {
+                                scope.launch { snackBarHostState.showSnackbar("Hello $textFieldState") }
+                            }
+                        ) {
+                            Text("Click on me")
+                        }
                     }
                 }
             }
