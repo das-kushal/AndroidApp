@@ -58,24 +58,7 @@ class MainActivity : ComponentActivity() {
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
 
                 ) { innerPadding ->
-                    var color by remember { mutableStateOf(Color.Yellow) }
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        ColorBox(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .weight(1f),
-
-                            ) {
-                            color = it
-                        }
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .weight(1f)
-                                .background(color)
-                        )
-                    }
+                    Navigation()
                 }
             }
         }
