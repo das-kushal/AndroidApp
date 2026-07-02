@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.firstapp.navigation.NavGraph
 import com.example.firstapp.ui.theme.FirstAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -90,7 +91,7 @@ class MainActivity : ComponentActivity() {
                         ) { innerPadding ->
 //                    TopBar(modifier = Modifier.padding(innerPadding))
 //                        Hello(modifier = Modifier.padding(innerPadding))
-                        AlertDialogExample()
+                        NavGraph()
 
                     }
                 }
