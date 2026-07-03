@@ -1,5 +1,6 @@
 package com.example.firstapp.navigation
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
 
 data class Book(
@@ -14,7 +15,7 @@ sealed class BookType(val foregroundColor: Color, val backgroundColor: Color) {
     data object NonFiction : BookType(Color(0xFF062100), Color(0xFFD1F2D1))
 }
 
-val books: List<Book> = listOf(
+val books = mutableStateListOf(
     Book("Catch-22", "Joseph Heller", true),
     Book("The Great Gatsby", "F. Scott Fitzgerald", true),
     Book("The Catcher in the Rye", "J.D. Salinger", true),

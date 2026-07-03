@@ -1,6 +1,7 @@
 package com.example.firstapp.navigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,9 +21,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +54,10 @@ fun HomeScreenUI(modifier: Modifier = Modifier, navController: NavHostController
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(books) { book ->
-                BookCard(book)
+                BookCard(book) {
+                    println("Deleting book: ${book.title}")
+                    books.remove(book)
+                }
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
@@ -77,7 +83,7 @@ fun HomeScreenUI(modifier: Modifier = Modifier, navController: NavHostController
 }
 
 @Composable
-fun BookCard(book: Book) {
+fun BookCard(book: Book, onDeleteClick: (Book) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -95,8 +101,7 @@ fun BookCard(book: Book) {
             Column(
 
                 verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.Start
-
+                horizontalAlignment = Alignment.Start,
             ) {
                 Text(
                     text = book.title,
@@ -113,7 +118,23 @@ fun BookCard(book: Book) {
             }
 
             if (book.read) {
-                Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.delete))
+                Column(
+
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+
+                    ) {
+                    Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.delete))
+                    IconButton(
+                        onClick = { onDeleteClick(book) },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = stringResource(R.string.delete),
+                            tint = Color.DarkGray
+                        )
+                    }
+                }
             }
         }
     }
@@ -138,7 +159,10 @@ private fun Previewing(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(books) { book ->
-                BookCard(book)
+                BookCard(
+                    book,
+                    onDeleteClick = {}
+                )
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
