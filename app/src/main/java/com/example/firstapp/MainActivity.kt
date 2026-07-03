@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                         ) { innerPadding ->
 //                    TopBar(modifier = Modifier.padding(innerPadding))
 //                        Hello(modifier = Modifier.padding(innerPadding))
-                        NavGraph()
+                        NavGraph(modifier = Modifier.padding(innerPadding))
 
                     }
                 }
