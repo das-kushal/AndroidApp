@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class MyNavRoutes {
     @Serializable
-    object LoginScreen : MyNavRoutes()
+    data object LoginScreen : MyNavRoutes()
 
     @Serializable
-    object HomeScreen : MyNavRoutes()
+    data object HomeScreen : MyNavRoutes()
 }
