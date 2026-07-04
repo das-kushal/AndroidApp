@@ -2,7 +2,6 @@ package com.example.firstapp.navigation
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 sealed class MyNavRoutes {
     @Serializable
@@ -10,4 +9,7 @@ sealed class MyNavRoutes {
 
     @Serializable
     data object HomeScreen : MyNavRoutes()
+
+    @Serializable
+    data class EditBookScreen(val bookId: String) : MyNavRoutes()
 }

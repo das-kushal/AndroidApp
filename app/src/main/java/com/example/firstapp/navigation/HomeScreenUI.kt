@@ -1,7 +1,7 @@
 package com.example.firstapp.navigation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +25,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,10 +36,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.firstapp.R
+import com.example.firstapp.navigation.model.Book
+import com.example.firstapp.navigation.model.BookType
+import com.example.firstapp.navigation.viewmodel.ListBooksViewModel
 
 @Composable
-fun HomeScreenUI(modifier: Modifier = Modifier, navController: NavHostController) {
+fun HomeScreenUI(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    viewModel: ListBooksViewModel
+) {
+    // Correctly observe the StateFlow from the ViewModel
+    val books by viewModel.books.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -54,10 +66,15 @@ fun HomeScreenUI(modifier: Modifier = Modifier, navController: NavHostController
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(books) { book ->
-                BookCard(book) {
-                    println("Deleting book: ${book.title}")
-                    books.remove(book)
-                }
+                BookCard(
+                    book = book,
+                    onDeleteClick = {
+                        viewModel.deleteBook(book)
+                    },
+                    onCardClick = {
+                        navController.navigate(MyNavRoutes.EditBookScreen(book.id))
+                    }
+                )
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
@@ -75,7 +92,6 @@ fun HomeScreenUI(modifier: Modifier = Modifier, navController: NavHostController
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black
             )
-
         ) {
             Text(text = "Back to Login Screen", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         }
@@ -83,9 +99,15 @@ fun HomeScreenUI(modifier: Modifier = Modifier, navController: NavHostController
 }
 
 @Composable
-fun BookCard(book: Book, onDeleteClick: (Book) -> Unit) {
+fun BookCard(
+    book: Book,
+    onDeleteClick: (Book) -> Unit,
+    onCardClick: () -> Unit
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onCardClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -96,10 +118,9 @@ fun BookCard(book: Book, onDeleteClick: (Book) -> Unit) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
-
         ) {
             Column(
-
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.Start,
             ) {
@@ -114,26 +135,26 @@ fun BookCard(book: Book, onDeleteClick: (Book) -> Unit) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = book.bookType.foregroundColor,
                 )
-
             }
 
-            if (book.read) {
-                Column(
-
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-
-                    ) {
-                    Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.delete))
-                    IconButton(
-                        onClick = { onDeleteClick(book) },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = stringResource(R.string.delete),
-                            tint = Color.DarkGray
-                        )
-                    }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (book.read) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = "Read",
+                        tint = book.bookType.foregroundColor
+                    )
+                }
+                IconButton(
+                    onClick = { onDeleteClick(book) },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.delete),
+                        tint = Color.DarkGray
+                    )
                 }
             }
         }
@@ -142,45 +163,36 @@ fun BookCard(book: Book, onDeleteClick: (Book) -> Unit) {
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-private fun Previewing(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
+private fun Previewing() {
+    // Provide dummy data for the preview
+    val dummyBooks = listOf(
+        Book(title = "Sample Book", author = "Author Name", read = true, bookType = BookType.Fiction),
+        Book(title = "Another Book", author = "Someone Else", read = false, bookType = BookType.NonFiction)
+    )
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Home Screen", fontSize = 32.sp, fontWeight = FontWeight.Bold)
-
         Spacer(modifier = Modifier.height(16.dp))
-
         LazyColumn(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(books) { book ->
-                BookCard(
-                    book,
-                    onDeleteClick = {}
-                )
+            items(dummyBooks) { book ->
+                BookCard(book, onDeleteClick = {}, onCardClick = {})
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Button(
-            onClick = {
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
+            onClick = {},
+            modifier = Modifier.fillMaxWidth().height(48.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black
-            )
-
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(text = "Back to Login Screen", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         }
