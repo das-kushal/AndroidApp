@@ -28,8 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.firstapp.navigation.model.Book
-import com.example.firstapp.navigation.model.BookType
+import com.example.firstapp.navigation.utils.BookVM
+import com.example.firstapp.navigation.utils.BookType
 import com.example.firstapp.navigation.viewmodel.ListBooksViewModel
 
 @Composable

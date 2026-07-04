@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.firstapp.R
-import com.example.firstapp.navigation.model.Book
-import com.example.firstapp.navigation.model.BookType
+import com.example.firstapp.navigation.utils.BookVM
+import com.example.firstapp.navigation.utils.BookType
 import com.example.firstapp.navigation.viewmodel.ListBooksViewModel
 
 @Composable
@@ -100,8 +100,8 @@ fun HomeScreenUI(
 
 @Composable
 fun BookCard(
-    book: Book,
-    onDeleteClick: (Book) -> Unit,
+    book: BookVM,
+    onDeleteClick: (BookVM) -> Unit,
     onCardClick: () -> Unit
 ) {
     Card(
@@ -166,8 +166,8 @@ fun BookCard(
 private fun Previewing() {
     // Provide dummy data for the preview
     val dummyBooks = listOf(
-        Book(title = "Sample Book", author = "Author Name", read = true, bookType = BookType.Fiction),
-        Book(title = "Another Book", author = "Someone Else", read = false, bookType = BookType.NonFiction)
+        BookVM(title = "Sample Book", author = "Author Name", read = true, bookType = BookType.Fiction),
+        BookVM(title = "Another Book", author = "Someone Else", read = false, bookType = BookType.NonFiction)
     )
 
     Column(
