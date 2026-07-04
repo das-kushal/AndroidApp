@@ -1,225 +1,253 @@
 package com.example.firstapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.firstapp.navigation.NavGraph
 import com.example.firstapp.ui.theme.FirstAppTheme
-import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val snackBarHostState = remember { SnackbarHostState() }
             FirstAppTheme {
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+                ModalNavigationDrawer(
+                    drawerContent = {
+                        DrawerHeader()
+                        DrawerBody(
+                            items = listOf(
+                                MenuItem(
+                                    id = "home",
+                                    title = "Home",
+                                    contentDescription = "Go to Home Screen",
+                                    icon = Icons.Default.Home
+                                ),
+                                MenuItem(
+                                    id = "settings",
+                                    title = "Settings",
+                                    contentDescription = "Go to Settings Screen",
+                                    icon = Icons.Default.Settings
+                                ),
+                                MenuItem(
+                                    id = "help",
+                                    title = "Help",
+                                    contentDescription = "Go to get Help Screen",
+                                    icon = Icons.Default.Info
+                                ),
+                            )
+                        ) { }
+                    }
+                ) {
+                    Scaffold(
+                        modifier = Modifier
+                            .fillMaxSize(),
 
-                ) { innerPadding ->
-                    var color by remember { mutableStateOf(Color.Yellow) }
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        ColorBox(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .weight(1f),
 
-                            ) {
-                            color = it
-                        }
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .weight(1f)
-                                .background(color)
-                        )
+                        ) { innerPadding ->
+//                    TopBar(modifier = Modifier.padding(innerPadding))
+//                        Hello(modifier = Modifier.padding(innerPadding))
+                        NavGraph(modifier = Modifier.padding(innerPadding))
+
                     }
                 }
+
             }
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ColorBox(
-    modifier: Modifier = Modifier,
-    updateColor: (Color) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .background(Color.Red)
-            .clickable {
-                updateColor(
-                    Color(
-                        Random.nextFloat(),
-                        Random.nextFloat(),
-                        Random.nextFloat(),
-                        1f
-                    )
-                )
+fun TopBar(modifier: Modifier = Modifier) {
+    val context = LocalContext.current.applicationContext
+    TopAppBar(
+        title = { Text("Hello world") },
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Checking", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Check, contentDescription = "Checking")
             }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Green,
+            titleContentColor = Color.White,
+            navigationIconContentColor = Color.White
+
+        ),
+        actions = {
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Profile", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
+            }
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Search", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+            }
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "More", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
+            }
+        }
     )
 }
 
+@Preview(showSystemUi = true)
 @Composable
-fun ImageCard(
-    painter: Painter,
-    contentDescription: String,
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(5.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth() // Ensure content fills card width
-        ) {
-            Image(
-                painter = painter,
-                contentDescription = contentDescription,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize() // Ensure image fills the box
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.White
-                            ),
-                            startY = 300f
-                        )
-                    )
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
-                contentAlignment = Alignment.BottomStart
-            ) {
-                Text(title, style = TextStyle(color = Color.Black, fontSize = 16.sp))
-            }
-        }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun AlertDialogExample() {
+    var openDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     Column(
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .height(400.dp)
-            .padding(10.dp)
-            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier,
-            style = MaterialTheme.typography.headlineLarge
-        )
-
-        Text(
-            text = "Hello world",
-            fontSize = 25.sp
-        )
-
-        val onClick = {
-            println("clicked")
-        }
-        ElevatedButton(
-            onClick = onClick,
-            modifier = Modifier.padding(10.dp)
+        Card(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 6.dp
+            )
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Alert Dialog Box",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.DarkGray
+                )
+
+                IconButton(
+                    onClick = { openDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = Color.DarkGray,
+                        contentColor = Color.LightGray
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete"
+                    )
+                }
+            }
+        }
+
+        if (openDialog) {
+            AlertDialog(
+                onDismissRequest = { openDialog = false },
+//                icon = {
+//                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Item")
+//                },
+                title = {
+                    Text("Delete Item")
+                },
+                text = {
+                    Text("Are you sure you want to delete this item?")
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            Toast.makeText(
+                                context,
+                                "Item has been deleted successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            openDialog = false
+                        }
+                    ) { Text("Delete") }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { openDialog = false }
+                    ) {
+                        Text("Cancel")
+                    }
+                }
             )
         }
     }
 }
 
-//@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ImageCardPreview() {
-    FirstAppTheme {
-        Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp)
-                .background(Color.Red),
-        ) { innerPadding ->
-
-            val painter = painterResource(R.drawable.leetcodebadge)
-            val description = "leetcode badge"
-            val title = "leetcode badge"
-
-            // Use a root container to handle Scaffold's innerPadding
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(0.5f)
-                    .statusBarsPadding()
-                    .padding(innerPadding)
-
-
-            ) {
-                ImageCard(
-                    painter = painter,
-                    contentDescription = description,
-                    title = title,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
+fun Hello(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxHeight()
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            "Hello World!",
+            fontWeight = FontWeight.Bold
+        )
     }
 }
