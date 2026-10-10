@@ -26,7 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.firstapp.navigation.utils.BookVM
 import com.example.firstapp.navigation.utils.BookType
@@ -125,6 +130,35 @@ fun EditBookScreenUI(
             )
         ) {
             Text("Save Changes")
+        }
+    }
+}
+
+
+fun changeName(currentName: String): String {
+    return if (currentName == "Hello") "Android" else "Hello"
+}
+
+@Composable
+@Preview(showSystemUi = true, showBackground = true)
+fun Hello(modifier: Modifier = Modifier) {
+    var name by remember { mutableStateOf("Hello") }
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = name,
+            style = TextStyle(
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { name = changeName(name) }) {
+            Text("Change Name")
         }
     }
 }

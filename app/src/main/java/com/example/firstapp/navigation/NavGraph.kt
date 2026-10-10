@@ -2,6 +2,7 @@ package com.example.firstapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,7 +12,7 @@ import com.example.firstapp.navigation.viewmodel.ListBooksViewModel
 @Composable
 fun NavGraph(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    val viewModel = ListBooksViewModel()
+    val viewModel = viewModel<ListBooksViewModel>()
 
     NavHost(
         navController = navController,
