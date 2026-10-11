@@ -1,5 +1,7 @@
 package com.example.firstapp
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -21,6 +23,8 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -49,62 +53,82 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firstapp.navigation.NavGraph
 import com.example.firstapp.ui.theme.FirstAppTheme
+import kotlinx.serialization.Contextual
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            FirstAppTheme {
-                ModalNavigationDrawer(
-                    drawerContent = {
-                        DrawerHeader()
-                        DrawerBody(
-                            items = listOf(
-                                MenuItem(
-                                    id = "home",
-                                    title = "Home",
-                                    contentDescription = "Go to Home Screen",
-                                    icon = Icons.Default.Home
-                                ),
-                                MenuItem(
-                                    id = "settings",
-                                    title = "Settings",
-                                    contentDescription = "Go to Settings Screen",
-                                    icon = Icons.Default.Settings
-                                ),
-                                MenuItem(
-                                    id = "help",
-                                    title = "Help",
-                                    contentDescription = "Go to get Help Screen",
-                                    icon = Icons.Default.Info
-                                ),
-                            )
-                        ) { }
-                    }
-                ) {
-                    Scaffold(
-                        modifier = Modifier
-                            .fillMaxSize(),
+            FirstApp(modifier = Modifier)
+        }
+    }
+}
 
 
-                        ) { innerPadding ->
-//                    TopBar(modifier = Modifier.padding(innerPadding))
-//                        Hello(modifier = Modifier.padding(innerPadding))
-                        NavGraph(modifier = Modifier.padding(innerPadding))
+fun shareWithFriends(context: Context) {
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(
+            Intent.EXTRA_TEXT,
+            "Check out my favourite oranges"
+        )
+    }
 
-                    }
+    context.startActivity(intent)
+}
+
+
+@Composable
+fun FirstApp(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    FirstAppTheme {
+        ModalNavigationDrawer(
+            drawerContent = {
+                DrawerHeader()
+                DrawerBody(
+                    items = listOf(
+                        MenuItem(
+                            id = "home",
+                            title = "Home",
+                            contentDescription = "Go to Home Screen",
+                            icon = Icons.Default.Home
+                        ),
+                        MenuItem(
+                            id = "settings",
+                            title = "Settings",
+                            contentDescription = "Go to Settings Screen",
+                            icon = Icons.Default.Settings
+                        ),
+                        MenuItem(
+                            id = "help",
+                            title = "Help",
+                            contentDescription = "Go to get Help Screen",
+                            icon = Icons.Default.Info
+                        ),
+                    )
+                ) { }
+            }
+        ) {
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopBar(
+                        shareWithFriends = { shareWithFriends(context = context) }
+                    )
                 }
-
+            ) { innerPadding ->
+                NavGraph(modifier = Modifier.padding(innerPadding))
             }
         }
+
     }
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(modifier: Modifier = Modifier) {
+fun TopBar(modifier: Modifier = Modifier, shareWithFriends: () -> Unit) {
     val context = LocalContext.current.applicationContext
     TopAppBar(
         title = { Text("Hello world") },
@@ -114,16 +138,21 @@ fun TopBar(modifier: Modifier = Modifier) {
                     Toast.makeText(context, "Checking", Toast.LENGTH_SHORT).show()
                 }
             ) {
-                Icon(imageVector = Icons.Default.Check, contentDescription = "Checking")
+                Icon(imageVector = Icons.Default.Star, contentDescription = "Checking")
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Green,
-            titleContentColor = Color.White,
-            navigationIconContentColor = Color.White
-
+            containerColor = Color.Transparent,
+//            titleContentColor = Color.White,
+//            navigationIconContentColor = Color.White,
+//            actionIconContentColor = Color.White
         ),
         actions = {
+            IconButton(
+                onClick = shareWithFriends
+            ) {
+                Icon(imageVector = Icons.Default.Share, contentDescription = "Share with Friends")
+            }
             IconButton(
                 onClick = {
                     Toast.makeText(context, "Profile", Toast.LENGTH_SHORT).show()
