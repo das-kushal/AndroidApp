@@ -10,20 +10,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -33,7 +31,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -53,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firstapp.navigation.NavGraph
 import com.example.firstapp.ui.theme.FirstAppTheme
-import kotlinx.serialization.Contextual
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,51 +78,80 @@ fun shareWithFriends(context: Context) {
 
 
 @Composable
+@Preview(showBackground = true, showSystemUi = true)
 fun FirstApp(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     FirstAppTheme {
-        ModalNavigationDrawer(
-            drawerContent = {
-                DrawerHeader()
-                DrawerBody(
-                    items = listOf(
-                        MenuItem(
-                            id = "home",
-                            title = "Home",
-                            contentDescription = "Go to Home Screen",
-                            icon = Icons.Default.Home
-                        ),
-                        MenuItem(
-                            id = "settings",
-                            title = "Settings",
-                            contentDescription = "Go to Settings Screen",
-                            icon = Icons.Default.Settings
-                        ),
-                        MenuItem(
-                            id = "help",
-                            title = "Help",
-                            contentDescription = "Go to get Help Screen",
-                            icon = Icons.Default.Info
-                        ),
-                    )
-                ) { }
-            }
-        ) {
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopBar(
-                        shareWithFriends = { shareWithFriends(context = context) }
-                    )
-                }
-            ) { innerPadding ->
-                NavGraph(modifier = Modifier.padding(innerPadding))
-            }
-        }
+//        ModalNavigationDrawer(
+//            drawerContent = {
+//                DrawerHeader()
+//                DrawerBody(
+//                    items = listOf(
+//                        MenuItem(
+//                            id = "home",
+//                            title = "Home",
+//                            contentDescription = "Go to Home Screen",
+//                            icon = Icons.Default.Home
+//                        ),
+//                        MenuItem(
+//                            id = "settings",
+//                            title = "Settings",
+//                            contentDescription = "Go to Settings Screen",
+//                            icon = Icons.Default.Settings
+//                        ),
+//                        MenuItem(
+//                            id = "help",
+//                            title = "Help",
+//                            contentDescription = "Go to get Help Screen",
+//                            icon = Icons.Default.Info
+//                        ),
+//                    )
+//                ) { }
+//            }
+//        ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopBar(
+                    shareWithFriends = { shareWithFriends(context = context) }
+                )
+            },
 
+            bottomBar = {
+                BottomBar()
+            }
+        ) { innerPadding ->
+            NavGraph(modifier = Modifier.padding(innerPadding))
+        }
     }
+
+//    }
 }
 
+
+@Composable
+fun BottomBar(modifier: Modifier = Modifier) {
+    NavigationBar {
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Home, contentDescription = "home") },
+            label = {Text("Home")},
+            selected = false,
+            onClick = {}
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Place, contentDescription = "tour") },
+            label = {Text("Tours")},
+            selected = false,
+            onClick = {}
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "shop") },
+            label = {Text("Shop")},
+            selected = false,
+            onClick = {}
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,7 +205,7 @@ fun TopBar(modifier: Modifier = Modifier, shareWithFriends: () -> Unit) {
     )
 }
 
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
 @Composable
 fun AlertDialogExample() {
     var openDialog by remember { mutableStateOf(false) }
@@ -265,18 +292,3 @@ fun AlertDialogExample() {
     }
 }
 
-@Composable
-fun Hello(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxHeight()
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            "Hello World!",
-            fontWeight = FontWeight.Bold
-        )
-    }
-}

@@ -16,7 +16,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = MyNavRoutes.LoginScreen
+        startDestination = MyNavRoutes.HomeScreen
     ) {
         composable<MyNavRoutes.LoginScreen> {
             LoginScreenUI(navController)
