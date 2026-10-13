@@ -134,19 +134,19 @@ fun BottomBar(modifier: Modifier = Modifier) {
     NavigationBar {
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = "home") },
-            label = {Text("Home")},
+            label = { Text("Home") },
             selected = false,
             onClick = {}
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Place, contentDescription = "tour") },
-            label = {Text("Tours")},
+            label = { Text("Tours") },
             selected = false,
             onClick = {}
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "shop") },
-            label = {Text("Shop")},
+            label = { Text("Shop") },
             selected = false,
             onClick = {}
         )
@@ -291,4 +291,3 @@ fun AlertDialogExample() {
         }
     }
 }
-
